@@ -17,12 +17,9 @@ public class Prob03 {
 	private static void replaceSpace(char[] c) {
 		// TODO Auto-generated method stub
 		String str="";
-		for(char cc:c) {
-			if(cc==' ') str+=",";
-			else str+=cc;
+		for(int i = 0;i<c.length;i++) {
+			if(c[i]==' ') c[i]=',';
 		}
-		
-		System.out.println(str);
 	}
 
 	private static void printCharArray(char[] c) {

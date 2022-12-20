@@ -25,8 +25,15 @@ public class Prob05 {
 				if(answer == correctNumber) {
 					System.out.println("맞았습니다.");
 					break;
-				} else if(answer>correctNumber) high = answer;
-				else low = answer;
+				} else if(answer>correctNumber) {
+					high = answer;
+					System.out.println("더 낮게");
+				}
+				else {
+					low = answer;
+					System.out.println("더 높게");
+
+				}
 
 				
 			}
