@@ -9,7 +9,6 @@ public class TV {
 		this.channel = channel;
 		this.volume = volume;
 		this.power = power;
-		
 	}
 	public void power(boolean on) {
 		this.power = on;
