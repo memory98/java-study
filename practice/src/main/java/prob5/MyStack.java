@@ -1,47 +1,61 @@
 package prob5;
 public class MyStack {
 	private String[] buffer;
-	private int index;
+	private int index; //변한 배열의 크기
+	private int n; // 처음 생성 배열의 크기
 
 	public MyStack(int n) {
-		buffer = new String[0];
+		buffer = new String[n];
 		this.index = 0;
+		this.n = n;
 	}
 
 	public void push(String str) {
-//		System.out.print(this.index+ " : ");
-//		if(this.index>=this.buffer.length-1) {
-		String[] buffer1 = new String[this.buffer.length + 1];
-		for (int i = 0; i < this.buffer.length; i++)
-			buffer1[i] = buffer[i];
-			buffer1[buffer1.length - 1] = str;
-			this.buffer = new String[buffer1.length];
-		for (int i = 0; i < this.buffer.length; i++)
-			this.buffer[i] = buffer1[i];
-			this.index += 1;
-//			} else {
-//				buffer[this.index]=str;
-//				this.index+=1;
-//		}
+		String[] buffer1;
+		if(index+1>=n) {
+			buffer1 = new String[index+1];
+		} else {
+			buffer1 = new String[n+1];
+		}
+		
+		for(int i = 0;i<index;i++) {
+			buffer1[i+1]=buffer[i];
+		}
+		buffer1[0] = str;
+		index+=1;
+		if(index>n) {
+			buffer = new String[index];
+		}
+		for(int i = 0;i<index;i++) {
+			buffer[i] = buffer1[i];
+		}
 	}
 
 	public boolean isEmpty() {
-		if (this.buffer.length == 0)
+		if(index==0) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 	public String pop() {
-//		System.out.print(index + "  : ");
-		String result = this.buffer[this.buffer.length - 1];
-		String[] buffer1 = new String[this.buffer.length - 1];
-		for (int i = 0; i < buffer1.length; i++)
-			buffer1[i] = this.buffer[i];
-		buffer = new String[buffer1.length];
-		for (int i = 0; i < buffer1.length; i++)
-			this.buffer[i] = buffer1[i];
-		index -= 1;
-		return result;
+		String[] buffer1 = new String[index-1];
+		String str = buffer[0];
+		for(int i = 1; i<index;i++) {
+			buffer1[i-1]=buffer[i];
+		}
+		if(index >= n) {
+			buffer = new String[index];
+		} 
+		for(int i = 0;i<index-1;i++) {
+			buffer[i]=buffer1[i];
+		}
+		index-=1;
+		return str;
+	}
+	
+	public void print() {
+		for(String s:buffer) System.out.print(s+" ");
 	}
 }

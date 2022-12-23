@@ -20,7 +20,6 @@ public class MainApp {
 
 		stack = new MyStack(3);
 		stack.push("Hello");
-//		stack.print();
 		System.out.println(stack.pop());
 		System.out.println(stack.pop());
 
