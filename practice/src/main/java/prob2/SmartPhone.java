@@ -5,7 +5,7 @@ public class SmartPhone extends MusicPhone{
 		if(function.equals("음악")) {
 			playMusic();
 		} else if(function.equals("통화")) {
-			call();
+			super.execute(function);
 		} else if(function.equals("앱")){
 			app();
 		} else {

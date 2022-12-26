@@ -1,6 +1,6 @@
 package prob5;
 
-public class MainApp {
+public class MainApp2 {
 
 	public static void main(String[] args) {
 		
@@ -23,8 +23,8 @@ public class MainApp {
 		stack.push("Hello");
 		System.out.println(stack.pop());
 		System.out.println(stack.pop());
-//		} catch() ( MyStackException ex) {
-//		System.out.println( ex );
-//	}
+//		} catch() {
+//			
+//		}
 	}
 }
