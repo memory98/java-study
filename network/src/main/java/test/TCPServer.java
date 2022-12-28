@@ -9,7 +9,7 @@ import java.net.Socket;
 
 public class TCPServer {
 	public static void main(String[] args) {
-		ServerSocket serverSocket = null;
+		ServerSocket serverSocket = null; 
 		try {
 			// 1. Server Socket 생성
 			serverSocket = new ServerSocket();
@@ -45,7 +45,7 @@ public class TCPServer {
 
 					String data = new String(buffer, 0, readByteCount, "UTF-8");
 					System.out.println("[server] received : " + data);
-					
+
 					// 6. 데이터 쓰기
 					os.write(data.getBytes("UTF-8"));
 				}
