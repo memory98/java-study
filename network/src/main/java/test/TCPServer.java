@@ -36,14 +36,14 @@ public class TCPServer {
 					// 5. 데이터 읽기
 					byte[] buffer = new byte[256];
 
-					int readByteCount = is.read(buffer); //blocking
-					if(readByteCount ==-1) {
+					int readByteCount = is.read(buffer); // blocking
+					if (readByteCount == -1) {
 						System.out.println("[server] closed by client");
 						break;
 					}
-					
-					String data = new String(buffer,0,readByteCount,"UTF-8");
-					System.out.println("[server] received : "+data);
+
+					String data = new String(buffer, 0, readByteCount, "UTF-8");
+					System.out.println("[server] received : " + data);
 				}
 			} catch (IOException ex) {
 				System.out.println("[server] error : " + ex);
@@ -59,7 +59,7 @@ public class TCPServer {
 		} catch (IOException e) {
 			System.out.println("[server] error : " + e);
 		} finally {
-			try { 
+			try {
 				if (serverSocket != null && !serverSocket.isClosed()) {
 					serverSocket.close();
 				}
