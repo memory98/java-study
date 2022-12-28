@@ -46,7 +46,7 @@ public class LoginMain {
 //			System.out.println(user.getPassword());
 //			System.out.println("Id equal : " + users.get(i).getId().equals(user.getId()));
 //			System.out.println("Password equal : " + users.get(i).getPassword().equals(user.getPassword()));
-			if (users.get(i).getId().equals(user.getId()) && users.get(i).getPassword().equals(user.getPassword())) {
+			if (users.get(i).equals(user)) {
 				break;
 			}
 			if (users.get(i).getId().equals(user.getId()) && !users.get(i).getPassword().equals(user.getPassword())) {

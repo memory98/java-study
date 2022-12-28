@@ -1,0 +1,22 @@
+	public static void login(List<User> users, User user) {
+		/* 코드 작성 */
+		for (int i = 0; i < users.size(); i++) {
+//			System.out.println("List<User> users");
+//			System.out.print("Users =>" + users.get(i).getId() + " : ");
+//			System.out.println(users.get(i).getPassword());
+//			System.out.print("Users =>" + user.getId() + " : ");
+//			System.out.println(user.getPassword());
+//			System.out.println("Id equal : " + users.get(i).getId().equals(user.getId()));
+//			System.out.println("Password equal : " + users.get(i).getPassword().equals(user.getPassword()));
+			if (users.get(i).getId().equals(user.getId()) && users.get(i).getPassword().equals(user.getPassword())) {
+				break;
+			}
+			if (users.get(i).getId().equals(user.getId()) && !users.get(i).getPassword().equals(user.getPassword())) {
+				throw new PasswordDismatchException();
+			}
+			if (i == users.size() - 1) {
+				throw new UserNotFoundException();
+			}
+		}
+
+	}
