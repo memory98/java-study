@@ -20,40 +20,6 @@ public class EchoServer {
 				Socket socket = serverSocket.accept();
 				new EchoRequestHandler(socket).start();
 			}
-//			InetSocketAddress inetRemoteSocketAddress = (InetSocketAddress) socket.getRemoteSocketAddress();
-//			String remoteHostAddress = inetRemoteSocketAddress.getAddress().getHostAddress();
-//			int remotePort = inetRemoteSocketAddress.getPort();
-//			log("connected by client[" + remoteHostAddress + ":" + remotePort + "]");
-//
-//			try {
-//				// 4. IO Stream 받아오기
-//				PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true); // true
-//																													// 바로
-//																													// 출력.
-//				BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
-//
-//				while (true) {
-//					String data = br.readLine(); // 갱을 붙여라..?
-//					if (data == null) {
-//						log("closed by client");
-//						break;
-//					}
-//					log("received : " + data);
-//					pw.println(data);
-//				}
-//			} catch (SocketException ex) {
-//				log("suddenly closed by client");
-//			} catch (IOException ex) {
-//				log("error : " + ex);
-//			} finally {
-//				try {
-//					if (socket != null && !socket.isClosed()) {
-//						socket.close();
-//					}
-//				} catch (IOException ex) {
-//					ex.printStackTrace();
-//				}
-//			}
 		} catch (IOException e) {
 			log("error : " + e);
 		} finally {
