@@ -1,41 +1,49 @@
 package chat;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.net.SocketException;
 import java.util.List;
 
 public class ChatServerThread extends Thread {
-
 	private String nickname;
 	private Socket socket;
 	List<Writer> listWriters;
 	PrintWriter printWriter;
 	BufferedReader bufferedReader;
-
 	public ChatServerThread(Socket socket) {
 		this.socket = socket;
+		printWriter = null;
+		bufferedReader = null;
 	}
 
 	public ChatServerThread(Socket socket, List<Writer> listWriters) {
 		this.socket = socket;
 		this.listWriters = listWriters;
+		printWriter = null;
+		bufferedReader = null;
 	}
 
 	@Override
 	public void run() {
 		try {
 			// 1. Remote Host Infomation
+			InetSocketAddress inetRemoteSocketAddress = (InetSocketAddress) socket.getRemoteSocketAddress();
+			String remoteHostAddress = inetRemoteSocketAddress.getAddress().getHostAddress();
+			int remotePort = inetRemoteSocketAddress.getPort();
+			log("connected by client[" + remoteHostAddress + ":" + remotePort + "]");
 
 			// 2. 스트림 얻기
-			bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "URF-8"));
-			printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "URF-8"));
+			bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+			printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 
 			// 3. 요청 처리
 			while (true) {
@@ -46,8 +54,11 @@ public class ChatServerThread extends Thread {
 				}
 
 				// 4. 프로토콜 분석
-
 				String[] tokens = request.split(":");
+				System.out.println("request : "+request);
+				System.out.println("tokens[0] : "+tokens[0]);
+
+				System.out.println(tokens[1]);
 				if ("join".equals(tokens[0])) {
 					doJoin(tokens[1], printWriter);
 				} else if ("message".equals(tokens[0])) {
@@ -63,9 +74,9 @@ public class ChatServerThread extends Thread {
 					doQuit(printWriter);
 					break;
 				}
-
 			}
-
+		} catch (SocketException ex) {
+			System.out.println("[server] suddenly closed by client");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -73,21 +84,33 @@ public class ChatServerThread extends Thread {
 		}
 	}
 
+//	private void doJoin(String nickName) {
+//		this.nickname = nickName;
+////		synchronized(listWriters2) {
+//		listWriters2.add(nickname);
+//		String data = nickname+"님이 참여하였습니다.";
+//		printWriter.println(data);
+////		}
+//
+//		
+//		
+//	}
+	
 	private void doJoin(String nickName, Writer writer) {
 
-			this.nickname = nickName;
+//		System.out.println(nickname);
+		this.nickname = nickName;
 
-			listWriters = new ArrayList<Writer>();
+  		
 
-			String data = nickname + "님이 참여하였습니다.";
-			broadcast(data);
+		String data = nickname + "님이 입장하셨습니다.";
+  		broadcast(data);
 
-			new ChatServerThread(socket, listWriters).start();
 
-			addWriter(writer);
-
-			printWriter.println("join:ok");
-
+		new ChatServerThread(socket, listWriters).start();
+		addWriter(writer);
+		printWriter.println("join:ok");
+		printWriter.flush();
 	}
 
 	private void addWriter(Writer writer) {
@@ -105,9 +128,19 @@ public class ChatServerThread extends Thread {
 			}
 		}
 	}
+	
+	private void broadcast2(String data) {
+		synchronized (listWriters) {
+			for (Writer writer : listWriters) {
+				PrintWriter printWriter = (PrintWriter) writer;
+				printWriter.println(data);
+			}
+		}
+	}
 
 	private void doMessage(String string) {
-
+		printWriter.println("message:" + string + "\r\n");
+		new ChatServerThread(socket, listWriters).start();
 	}
 
 	private void doQuit() {
@@ -116,7 +149,6 @@ public class ChatServerThread extends Thread {
 
 	private void doQuit(Writer writer) {
 		removeWriter(writer);
-
 		String data = nickname + "님이 퇴장하였습니다.";
 		broadcast(data);
 	}
