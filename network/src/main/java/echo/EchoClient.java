@@ -22,9 +22,7 @@ public class EchoClient {
 			socket.connect(new InetSocketAddress(SERVER_IP, EchoServer.PORT));
 			log("conneted");
 
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true); // true
-																												// 바로
-																												// 출력.
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true); // true // 출력.
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 
 			scanner = new Scanner(System.in);

@@ -87,8 +87,6 @@ public class RequestHandler extends Thread {
 		}
 	}
 
-
-
 	private void reponseStaticResource(OutputStream outputStream, String url, String protocol) throws IOException {
 		// default(welcome) file set
 		if ("/".equals(url)) {
