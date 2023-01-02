@@ -9,7 +9,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-import echo.EchoServer;
+import chat.gui.ChatWindow;
 
 public class ChatClient {
 	private static final String SERVER_IP = "0.0.0.0";
@@ -30,45 +30,68 @@ public class ChatClient {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 
 			// 5. join 프로토콜
-			System.out.print("닉네임>>");
-			String nickname = scanner.nextLine();
-			printWriter.println("join:"+nickname);
-			
+//			String nickname = scanner.nextLine();
+//			printWriter.println("join:"+nickname);
+//			
 			// 6. ChatClientReceiveThread 시작
-			
-			
+
 			// 7. 키보드 입력 처리
-			while(true) {
+			String nickname;
+			while (true) {
+				System.out.print("닉네임");
+				System.out.print(">>");
+				nickname = scanner.nextLine();
+
+				if (!nickname.isEmpty()) {
+					printWriter.println("join:"+nickname);
+					break;
+				}
+				System.out.println("닉네임 한글자 이상 입력하세요.");
+				// 1. create socket
+				// 2. connect to server
+				// 3. get iostream
+				// 4. join protocol 진행
+//				String line = bufferedReader.readLine();
+			}
+			String line = "JOIN:OK";
+			if ("JOIN:OK".equals(line)) {
+//				new ChatWindow(nickname).show();
+				new ChatClientThread(bufferedReader).start();
+
+			}
+			System.out.print(">>");
+
+			while (true) {
+//				new ChatClientThread(bufferedReader).start();
 				System.out.print(">>");
 				String input = scanner.nextLine();
-				
-				if("quit".equals(input)==true) {
+				if ("quit".equals(input) == true) {
 					// 8. quit 프로토콜 처리
 					break;
 				} else {
 					// 9. 메시지 처리
-					new ChatClientThread(socket,nickname,input);
+					System.out.println(nickname+":"+input);
+					printWriter.println("message:"+input);
 				}
 			}
-		} catch(IOException e) {
-			log("error : "+e);
+		} catch (IOException e) {
+			log("error : " + e);
 		} finally {
-			if(scanner != null) {
+			if (scanner != null) {
 				scanner.close();
 			}
-			if(socket!= null && !socket.isClosed()) {
+			if (socket != null && !socket.isClosed()) {
 				try {
 					socket.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
 	}
-	
+
 	public static void log(String string) {
-		System.out.println("[chat client] : "+string);
+		System.out.println("[chat client] : " + string);
 	}
-	
+
 }
