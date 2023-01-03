@@ -17,17 +17,22 @@ public class ChatClientThread extends Thread {
 			String info = null;
 			while (true) {
 				info = bufferedReader.readLine();
-//				System.out.println(info);
-				if(info == null) {
+//				if(info.split(" ")[0]=="quit") {
+//					log(info);
+//					break;
+//				}
+
+				System.out.println(info);
+				if (info == null) {
 					log(info);
 					break;
 				}
 			}
 		} catch (IOException e) {
-			log("error : "+e);
+			log("error3 : " + e);
 		}
 	}
-	
+
 	public static void log(String string) {
 		System.out.println("[chat client] : " + string);
 	}

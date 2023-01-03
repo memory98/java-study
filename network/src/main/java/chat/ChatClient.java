@@ -52,27 +52,31 @@ public class ChatClient {
 				// 4. join protocol 진행
 
 			}
+			System.out.println(nickname + "님이 입장하셨습니다.");
 			String line = bufferedReader.readLine();
 			System.out.println(line);
 
 			if ("join:ok".equals(line)) {
 			}
-			new ChatClientThread(bufferedReader).start();
+			ChatClientThread chatClientThread = new ChatClientThread(bufferedReader);
+			chatClientThread.start();
 
 			while (true) {
 				System.out.print(">>");
 				String input = scanner.nextLine();
-				if ("quit".equals(input) == true) {
+				if ("quit".equals(input)) {
 					// 8. quit 프로토콜 처리
 					printWriter.println("quit");
+//					chatClientThread.stop();
 					break;
+				} else if ("".equals(input)) {
 				} else {
 					// 9. 메시지 처리
 					printWriter.println("message:" + input);
 				}
 			}
 		} catch (IOException e) {
-			log("error : " + e);
+			log("error1 : " + e);
 		} finally {
 			if (scanner != null) {
 				scanner.close();
@@ -81,9 +85,8 @@ public class ChatClient {
 				try {
 					socket.close();
 				} catch (IOException e) {
-					log("error : "+e);
+					log("error2 : " + e);
 				}
-				
 			}
 		}
 	}

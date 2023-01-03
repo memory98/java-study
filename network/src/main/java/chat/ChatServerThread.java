@@ -129,13 +129,13 @@ public class ChatServerThread extends Thread {
 //		System.out.println("퇴장하셨습니다.");
 //		printWriter.println(nickname + "님이 퇴장하셨습니다.");
 //		printWriter.flush();
-//
 //	}
 
 	private void doQuit(Writer writer) {
 		removeWriter(writer);
-		String data = nickname + "님이 퇴장하였습니다.";
+		String data =nickname + "님이 퇴장하였습니다.";
 		broadcast(data);
+//		System.out.println(data);
 	}
 
 	private void removeWriter(Writer writer) {
