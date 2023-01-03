@@ -15,6 +15,11 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+import chat.ChatClientThread;
 
 public class ChatWindow {
 
@@ -23,13 +28,20 @@ public class ChatWindow {
 	private Button buttonSend;
 	private TextField textField;
 	private TextArea textArea;
-
-	public ChatWindow(String name) {
-		frame = new Frame(name);
+	private String nickname;
+	private BufferedReader bufferedReader;
+	private PrintWriter printWriter;
+	
+	public ChatWindow(String nickname, BufferedReader bufferedReader,PrintWriter printWriter) {
+		frame = new Frame(nickname);
 		pannel = new Panel();
 		buttonSend = new Button("Send");
 		textField = new TextField();
 		textArea = new TextArea(30, 80);
+		this.nickname = nickname;
+		this.bufferedReader = bufferedReader;
+		this.printWriter = printWriter;
+		new ChatClientThread(bufferedReader).start();
 	}
 
 	public void show() {
@@ -81,17 +93,14 @@ public class ChatWindow {
 		});
 		frame.setVisible(true);
 		frame.pack();
-		
+
 		// IOStream 받아오기
 		// ChatClientThread 생성하고 실행
-		
-		
 	}
 
 	private void finish() {
 		// quit protocol 구현
-		
-		
+
 		// exit java(Application)
 		System.exit(0);
 
@@ -103,33 +112,56 @@ public class ChatWindow {
 
 		textField.setText("");
 		textField.requestFocus();
+
+		if(!message.equals("")) {
+			printWriter.println("message:" + message);
+		} 
+		
+		if(message.equals("quit")) {
+			printWriter.println("quit");
+			finish();
+		}
 		
 		// ChatClientThread 에서 서버로부터 받는 메세지가 있다 라고 하고
-		updateTextArea(message);
+//		updateTextArea(message);
 	}
-	
+
 	private void updateTextArea(String message) {
 		textArea.append(message);
 		textArea.append("\n");
 	}
-	
+
 	private class ChatClientThread extends Thread {
 		private BufferedReader bufferedReader;
 
 		public ChatClientThread(BufferedReader bufferedReader) {
 			this.bufferedReader = bufferedReader;
 		}
+
 		@Override
 		public void run() {
-			//String message = br,readLine();
+			// String message = br,readLine();
 			try {
 				updateTextArea("....");
-				String info = bufferedReader.readLine();
+				String info;
+				while (true) {
+					info = bufferedReader.readLine();
+					System.out.println(info);
+					updateTextArea(info);
+					if (info == null) {
+						log(info);
+						break;
+					}
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
+		}
+
+		public static void log(String string) {
+			System.out.println("[chat client] : " + string);
 		}
 	}
 }

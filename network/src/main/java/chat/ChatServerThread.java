@@ -79,6 +79,7 @@ public class ChatServerThread extends Thread {
 				}
 			}
 		} catch (SocketException ex) {
+			
 			System.out.println("[server] suddenly closed by client");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
