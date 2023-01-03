@@ -30,8 +30,7 @@ public class ChatClient {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 
 			// 5. join 프로토콜
-//			String nickname = scanner.nextLine();
-//			printWriter.println("join:"+nickname);
+
 //			
 			// 6. ChatClientReceiveThread 시작
 
@@ -43,7 +42,7 @@ public class ChatClient {
 				nickname = scanner.nextLine();
 
 				if (!nickname.isEmpty()) {
-					printWriter.println("join:"+nickname);
+					printWriter.println("join:" + nickname);
 					break;
 				}
 				System.out.println("닉네임 한글자 이상 입력하세요.");
@@ -51,27 +50,25 @@ public class ChatClient {
 				// 2. connect to server
 				// 3. get iostream
 				// 4. join protocol 진행
-//				String line = bufferedReader.readLine();
-			}
-			String line = "JOIN:OK";
-			if ("JOIN:OK".equals(line)) {
-//				new ChatWindow(nickname).show();
-				new ChatClientThread(bufferedReader).start();
 
 			}
-			System.out.print(">>");
+			String line = bufferedReader.readLine();
+			System.out.println(line);
+
+			if ("join:ok".equals(line)) {
+			}
+			new ChatClientThread(bufferedReader).start();
 
 			while (true) {
-//				new ChatClientThread(bufferedReader).start();
 				System.out.print(">>");
 				String input = scanner.nextLine();
 				if ("quit".equals(input) == true) {
 					// 8. quit 프로토콜 처리
+					printWriter.println("quit");
 					break;
 				} else {
 					// 9. 메시지 처리
-					System.out.println(nickname+":"+input);
-					printWriter.println("message:"+input);
+					printWriter.println("message:" + input);
 				}
 			}
 		} catch (IOException e) {
@@ -84,8 +81,9 @@ public class ChatClient {
 				try {
 					socket.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					log("error : "+e);
 				}
+				
 			}
 		}
 	}
@@ -93,5 +91,4 @@ public class ChatClient {
 	public static void log(String string) {
 		System.out.println("[chat client] : " + string);
 	}
-
 }

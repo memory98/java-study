@@ -14,10 +14,21 @@ public class ChatClientThread extends Thread {
 	@Override
 	public void run() {
 		try {
-			String info = bufferedReader.readLine();
-			System.out.println(info);
+			String info = null;
+			while (true) {
+				info = bufferedReader.readLine();
+//				System.out.println(info);
+				if(info == null) {
+					log(info);
+					break;
+				}
+			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			log("error : "+e);
 		}
+	}
+	
+	public static void log(String string) {
+		System.out.println("[chat client] : " + string);
 	}
 }

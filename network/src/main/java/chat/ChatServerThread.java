@@ -19,6 +19,7 @@ public class ChatServerThread extends Thread {
 	List<Writer> listWriters;
 	PrintWriter printWriter;
 	BufferedReader bufferedReader;
+
 	public ChatServerThread(Socket socket) {
 		this.socket = socket;
 		printWriter = null;
@@ -45,8 +46,6 @@ public class ChatServerThread extends Thread {
 			bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 			printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 
-			listWriters = new ArrayList<Writer>();
-			
 			// 3. 요청 처리
 			while (true) {
 				String request = bufferedReader.readLine();
@@ -57,17 +56,17 @@ public class ChatServerThread extends Thread {
 
 				// 4. 프로토콜 분석
 				String[] tokens = request.split(":");
-				System.out.println("request : "+request);
-				System.out.println("tokens[0] : "+tokens[0]);
-
-				System.out.println(tokens[1]);
+//				System.out.println("request : " + request);
+//				System.out.println("tokens[0] : " + tokens[0]);
+//
+//				System.out.println(tokens[1]);
 				if ("join".equals(tokens[0])) {
 					doJoin(tokens[1], printWriter);
 				} else if ("message".equals(tokens[0])) {
 					doMessage(tokens[1]);
 				} else if ("quit".equals(tokens[0])) {
-					doQuit();
-					// doQuit(printWriter);
+//					doQuit();
+					 doQuit(printWriter);
 
 				} else {
 					ChatServer.log("에러 : 알 수 없는 요청(" + tokens[0] + ")");
@@ -91,13 +90,12 @@ public class ChatServerThread extends Thread {
 	private void doJoin(String nickName, Writer writer) {
 //		System.out.println(nickname);
 		this.nickname = nickName;
-		
+
 		String data = nickname + "님이 입장하셨습니다.";
-  		broadcast(data);
-  		
+		broadcast(data);
+
 		addWriter(writer);
 
-//		new ChatServerThread(socket, listWriters).start();
 		printWriter.println("join:ok");
 		printWriter.flush();
 	}
@@ -110,26 +108,29 @@ public class ChatServerThread extends Thread {
 	}
 
 	private void broadcast(String data) {
-//		System.out.println(data); //113줄에서는 작동 for 안에서는 작동 x
 		synchronized (listWriters) {
+			System.out.println("listWriters : " + listWriters.size());
 			for (Writer writer : listWriters) {
 				PrintWriter printWriter = (PrintWriter) writer;
+				System.out.println(data); // 113줄에서는 작동 for 안에서는 작동 x
 				printWriter.println(data);
-				System.out.println(data); //113줄에서는 작동 for 안에서는 작동 x
+				printWriter.flush();
 			}
 		}
 	}
 
 	private void doMessage(String string) {
-//		printWriter.println("message:" + string + "\r\n");
-		System.out.println(nickname+":"+string);
-//		new ChatServerThread(socket, listWriters).start();
+		System.out.println(nickname + ":" + string);
+
+		broadcast(nickname + ":" + string);
 	}
 
-	private void doQuit() {
-		System.out.println("퇴장하셨습니다.");
-		printWriter.println(nickname+"님이 퇴장하셨습니다.");
-	}
+//	private void doQuit() {
+//		System.out.println("퇴장하셨습니다.");
+//		printWriter.println(nickname + "님이 퇴장하셨습니다.");
+//		printWriter.flush();
+//
+//	}
 
 	private void doQuit(Writer writer) {
 		removeWriter(writer);
