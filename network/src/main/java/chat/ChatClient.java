@@ -31,13 +31,12 @@ public class ChatClient {
 
 			// 5. join 프로토콜
 
-//			
 			// 6. ChatClientReceiveThread 시작
 
 			// 7. 키보드 입력 처리
 			String nickname;
 			while (true) {
-				System.out.print("닉네임");
+				System.out.println("대화명을 입력하세요.");
 				System.out.print(">>");
 				nickname = scanner.nextLine();
 
@@ -45,7 +44,7 @@ public class ChatClient {
 					printWriter.println("join:" + nickname);
 					break;
 				}
-				System.out.println("닉네임 한글자 이상 입력하세요.");
+				System.out.println("대화명은 한글자 이상 입력해야 합니다.\n");
 				// 1. create socket
 				// 2. connect to server
 				// 3. get iostream
