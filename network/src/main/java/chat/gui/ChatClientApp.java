@@ -17,7 +17,7 @@ public class ChatClientApp {
 	private static Socket socket;
 	private static PrintWriter printWriter;
 	private static BufferedReader bufferedReader;
-	
+
 	public static Socket getSocket() {
 		return socket;
 	}
@@ -32,8 +32,8 @@ public class ChatClientApp {
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		String nickname=null;
-		String line=null;
+		String nickname = null;
+		String line = null;
 		String name = null;
 		try {
 			// 1. 키보드 연결
@@ -57,10 +57,6 @@ public class ChatClientApp {
 					break;
 				}
 				System.out.println("대화명은 한글자 이상 입력해야 합니다.\n");
-				// 1. create socket
-				// 2. connect to server
-				// 3. get iostream
-				// 4. join protocol 진행
 			}
 
 			System.out.println(nickname + "님이 입장하셨습니다.");

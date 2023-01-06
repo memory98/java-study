@@ -19,7 +19,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ChatWindow {
-
 	private Frame frame;
 	private Panel pannel;
 	private Button buttonSend;
@@ -27,6 +26,7 @@ public class ChatWindow {
 	private TextArea textArea;
 	private BufferedReader bufferedReader;
 	private PrintWriter printWriter;
+	private String nickname;
 
 	public ChatWindow(String nickname) {
 		frame = new Frame(nickname);
@@ -34,6 +34,7 @@ public class ChatWindow {
 		buttonSend = new Button("Send");
 		textField = new TextField();
 		textArea = new TextArea(30, 80);
+		this.nickname = nickname;
 	}
 
 	public void show() {
@@ -82,8 +83,9 @@ public class ChatWindow {
 		// ChatClientThread 생성하고 실행
 		bufferedReader = ChatClientApp.getBufferedReader();
 		printWriter = ChatClientApp.getPrintWriter();
-		
+
 		new ChatClientThread().start();
+		updateTextArea(nickname + "님이 참가하셨습니다.");
 	}
 
 	private void finish() {
@@ -95,7 +97,6 @@ public class ChatWindow {
 			if (ChatClientApp.getSocket() != null && !ChatClientApp.getSocket().isClosed()) {
 				ChatClientApp.getSocket().close();
 			}
-			
 
 		} catch (IOException e) {
 			ChatClientApp.log("error : " + e);
@@ -109,12 +110,11 @@ public class ChatWindow {
 		textField.setText("");
 		textField.requestFocus();
 
-		
 		if (message.equals("quit")) {
 			finish();
 		} else if (!message.equals("")) {
 			printWriter.println("message:" + message);
-		} 
+		}
 		// ChatClientThread 에서 서버로부터 받는 메세지가 있다 라고 하고
 	}
 
