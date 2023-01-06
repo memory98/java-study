@@ -95,6 +95,8 @@ public class ChatWindow {
 			if (ChatClientApp.getSocket() != null && !ChatClientApp.getSocket().isClosed()) {
 				ChatClientApp.getSocket().close();
 			}
+			
+
 		} catch (IOException e) {
 			ChatClientApp.log("error : " + e);
 		}
@@ -107,12 +109,12 @@ public class ChatWindow {
 		textField.setText("");
 		textField.requestFocus();
 
-		if (!message.equals("")) {
-			printWriter.println("message:" + message);
-		} else if (message.equals("quit")) {
+		
+		if (message.equals("quit")) {
 			finish();
-		}
-
+		} else if (!message.equals("")) {
+			printWriter.println("message:" + message);
+		} 
 		// ChatClientThread 에서 서버로부터 받는 메세지가 있다 라고 하고
 	}
 
